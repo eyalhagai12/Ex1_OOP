@@ -1,6 +1,7 @@
 import FileReader
 import sys
 import os
+from Elevator import Elevator
 
 BUILDING_DIR_PATH = "data/Ex1_input/Ex1_Buildings"
 CALL_DIR_PATH = "data/Ex1_input/Ex1_Calls"
@@ -13,4 +14,10 @@ calls_list = FileReader.read_file(call_path)
 
 print(building_dir)
 print(calls_list)
+
+elevators = building_dir["_elevators"]
+
+elevators = [Elevator(x) for x in elevators]
+
+print(elevators)
 
