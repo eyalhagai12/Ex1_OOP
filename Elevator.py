@@ -39,5 +39,6 @@ class Elevator:
         }
         :return: A representation of the elevator
         """
-        return "Elevator " + str(self._id) + " {\n" + "\tPosition: " + str(
-            self._currentPos) + "\n\tSpeed: " + str(self._speed) + "\n}\n"
+        o='{'
+        c='}'
+        return f"\n{o}\n\tElevator ID: {self._id}\n\tPosition: {self._currentPos}\n\tSpeed: {self._speed}\n{c}"
