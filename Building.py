@@ -1,5 +1,5 @@
-import json
 from Elevator import Elevator
+import FileReader
 class Building:
     """
     This class is for simulating the building
@@ -36,8 +36,7 @@ class Building:
         -------
         JSON file in dict format
         """
-        with open(file=path) as fp:
-            return json.load(fp)
+        return FileReader.read_file(path)
         
     def elev_list(json_dict:dict):
         """
