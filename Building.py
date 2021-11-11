@@ -1,10 +1,13 @@
 from Elevator import Elevator
 import FileReader
+
+
 class Building:
     """
     This class is for simulating the building
     """
-    def __init__(self, json_dict:dict):
+
+    def __init__(self, json_dict: dict):
         """
         Description
         -----------
@@ -21,8 +24,8 @@ class Building:
         self._minFloor = json_dict['_minFloor']
         self._maxFloor = json_dict['_maxFloor']
         self._elevators = Building.elev_list(json_dict)
-        
-    def from_json(path:str):
+
+    def from_json(path: str):
         """
         Description
         -----------
@@ -37,8 +40,8 @@ class Building:
         JSON file in dict format
         """
         return FileReader.read_file(path)
-        
-    def elev_list(json_dict:dict):
+
+    def elev_list(json_dict: dict):
         """
         Description
         -----------
@@ -57,7 +60,7 @@ class Building:
         for i in range(len(temp1)):
             temp2.append(Elevator(temp1[i]))
         return temp2
-    
+
     def __repr__(self):
         """
         Description
@@ -69,4 +72,3 @@ class Building:
         str
         """
         return f"minFloor: {self._minFloor}, maxFloor: {self._maxFloor}, elevators: {self._elevators}\n"
-    
