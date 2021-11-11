@@ -2,7 +2,11 @@ import json
 import csv
 
 """
+Description:
+-----------
+
 This file has functions to read files and parse them to different data structures
+
 """
 
 
@@ -19,23 +23,9 @@ def read_file(path):
             file = json.load(f)
 
         elif ".csv" in path:
-            file = read_csv(f)
+            file = f.read().split("\n")
         else:
             raise FileNotFoundError("The file format is not supported")
 
         return file
-
-
-def read_csv(file):
-    """
-    A custom csv file reader that turns the calls to a list of dictionaries
-    :param file: The file of the
-    :return: A list of dictionaries that represent the calls
-    """
-
-    calls = file.read().split("\n")
-
-    return calls
-
-
 

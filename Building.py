@@ -21,11 +21,13 @@ class Building:
         -------
         None.
         """
+
         self._minFloor = json_dict['_minFloor']
         self._maxFloor = json_dict['_maxFloor']
         self._elevators = Building.elev_list(json_dict)
 
-    def from_json(path: str):
+    @classmethod
+    def from_json(cls, path: str):
         """
         Description
         -----------
@@ -39,9 +41,11 @@ class Building:
         -------
         JSON file in dict format
         """
+
         return FileReader.read_file(path)
 
-    def elev_list(json_dict: dict):
+    @classmethod
+    def elev_list(cls, json_dict: dict):
         """
         Description
         -----------
@@ -55,6 +59,7 @@ class Building:
         -------
         temp2 : list
         """
+
         temp1 = json_dict['_elevators']
         temp2 = []
         for i in range(len(temp1)):
@@ -71,4 +76,5 @@ class Building:
         -------
         str
         """
+
         return f"minFloor: {self._minFloor}, maxFloor: {self._maxFloor}, elevators: {self._elevators}\n"
