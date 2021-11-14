@@ -26,12 +26,8 @@ class Building:
         self._maxFloor = json_dict['_maxFloor']
         self._elevators = Building.elev_list(json_dict)
 
-<<<<<<< HEAD
-    def from_json(path: str):
-=======
     @classmethod
     def from_json(cls, path: str):
->>>>>>> c182d9bb33fd7f96268766683c1e630df4102f26
         """
         Description
         -----------
@@ -48,12 +44,8 @@ class Building:
 
         return FileReader.read_file(path)
 
-<<<<<<< HEAD
-    def elev_list(json_dict: dict):
-=======
     @classmethod
     def elev_list(cls, json_dict: dict):
->>>>>>> c182d9bb33fd7f96268766683c1e630df4102f26
         """
         Description
         -----------
@@ -74,12 +66,6 @@ class Building:
             temp2.append(Elevator(temp1[i]))
         return temp2
 
-<<<<<<< HEAD
-    def getElvators(self):
-        return self._elevators
-
-=======
->>>>>>> c182d9bb33fd7f96268766683c1e630df4102f26
     def __repr__(self):
         """
         Description
