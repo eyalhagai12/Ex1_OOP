@@ -29,7 +29,9 @@ class Elevator:
         self._openTime = elevator_dict["_openTime"]
         self._startTime = elevator_dict["_startTime"]
         self._stopTime = elevator_dict["_stopTime"]
-        self._currentPos = self._minFloor
+
+        # as i understood the elevator starts at level 0
+        self._currentPos = 0
 
     def __repr__(self):
         """
@@ -39,6 +41,8 @@ class Elevator:
         }
         :return: A representation of the elevator
         """
-        o='{'
-        c='}'
+
+        # why did you do this ?
+        o = '{'
+        c = '}'
         return f"\n{o}\n\tElevator ID: {self._id}\n\tPosition: {self._currentPos}\n\tSpeed: {self._speed}\n{c}"
