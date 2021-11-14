@@ -92,21 +92,6 @@ class Elevator:
         # as i understood the elevator starts at level 0
         self._currentPos = 0
 
-    def __repr__(self):
-        """
-        Elevator {id} {
-            current position: {pos}
-            speed: {speed}
-        }
-
-        :return: A representation of the elevator
-        """
-
-        # why did you do this ?
-        o = '{'
-        c = '}'
-        return f"\n{o}\n\tElevator ID: {self._id}\n\tPosition: {self._currentPos}\n\tSpeed: {self._speed}\n{c}"
-
     def add_call(self, call):
         """
         Add a new call to the elevators queues
@@ -132,11 +117,13 @@ class Elevator:
                 # add and sort the calls
                 self._up_calls.append(call)
                 self._up_calls.sort()
+                self._direction = 1
 
             else:
                 # add and sort the calls
                 self._down_calls.append(call)
                 self._down_calls.sort()
+                self._direction = -1
 
     def calculate_execution_time(self, call):
         """
@@ -264,3 +251,18 @@ class Elevator:
         :return: An int representing the state of this elevator
         """
         return self._state
+
+    def __repr__(self):
+        """
+        Elevator {id} {
+            current position: {pos}
+            speed: {speed}
+        }
+
+        :return: A representation of the elevator
+        """
+
+        # why did you do this ?
+        o = '{'
+        c = '}'
+        return f"\n{o}\n\tElevator ID: {self._id}\n\tPosition: {self._currentPos}\n\tSpeed: {self._speed}\n{c}"

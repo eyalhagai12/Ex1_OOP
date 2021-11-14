@@ -1,4 +1,5 @@
 import math
+from Building import Building
 
 
 class Simulator:
@@ -8,10 +9,10 @@ class Simulator:
     The idea is that when we get calls we try to simulate the best outcome and record our actions and then output he results
     """
 
-    def __init__(self, building, calls):
+    def __init__(self, building: Building, calls):
         self._building = building
         self._calls = calls
-        self._elevators = self._building.getElvators()
+        self._elevators = self._building.get_elevators()
 
     def run_sim(self):
         """
@@ -20,29 +21,28 @@ class Simulator:
         """
 
         # the time of the simulation
-        simulation_time = self._calls[-1].get_time() + 120
+        simulation_time = int(self._calls[-1].get_time() + 120) + 1
 
         call_index = 0
         for second in range(simulation_time):
             current_calls = []
 
             # get current calls
-            while second <= self._calls[call_index].get_time() < second + 1:
+            while call_index < 1000 and second <= self._calls[call_index].get_time() < second + 1:
                 current_calls.append(self._calls[call_index])
                 call_index += 1
 
             # assign calls, main work
-            best_indices = [-1 for c in current_calls]  # each cell contains the best elevator for this call
+            best_indices = [-1 for c in current_calls]  # each cell contains index of the best elevator for this call
             best_times = [math.inf for c in current_calls]
 
             for idx, call in enumerate(current_calls):
-                best_time = math.inf
-                for elev_idx, elevator in self._building.getElvators():
+                for elev_idx, elevator in enumerate(self._elevators):
                     # calculate time
                     elev_time = elevator.calculate_execution_time(call)
 
                     # save the best result
-                    if best_time > elev_time:
+                    if best_times[idx] > elev_time:
                         best_times[idx] = elev_time
                         best_indices[idx] = elev_idx
 
@@ -53,5 +53,3 @@ class Simulator:
 
                 # add the call to it
                 elev.add_call(call)
-
-
