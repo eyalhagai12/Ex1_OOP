@@ -6,7 +6,7 @@ class Simulator:
     """
     This class is for simulating the scenarios we encounter and calculate the best way of assigning the elevators
     This class has the algorithm within it, meaning this class is like an algorithm and and a simulator
-    The idea is that when we get calls we try to simulate the best outcome and record our actions and then output he results
+    The idea is that when we get calls we try to simulate the best outcome and record our actions and then output the results
     """
 
     def __init__(self, building: Building, calls):
@@ -17,7 +17,7 @@ class Simulator:
     def run_sim(self):
         """
         The main simulation loop
-        This function runs the simulation...
+        This function runs the simulation [add more doc here]
         """
 
         # the time of the simulation
