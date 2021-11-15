@@ -5,11 +5,18 @@ from Building import Building
 class Simulator:
     """
     This class is for simulating the scenarios we encounter and calculate the best way of assigning the elevators
-    This class has the algorithm within it, meaning this class is like an algorithm and and a simulator
+    This class has the algorithm within it, meaning this class is like an algorithm and a simulator
     The idea is that when we get calls we try to simulate the best outcome and record our actions and then output the results
     """
 
     def __init__(self, building: Building, calls):
+        """
+        Create a simulator object
+        Simulate the movements of the elevators in a given building
+
+        :param building: The building
+        :param calls: The calls
+        """
         self._building = building
         self._calls = calls
         self._elevators = self._building.get_elevators()
@@ -28,7 +35,7 @@ class Simulator:
             current_calls = []
 
             # get current calls
-            while call_index < 1000 and second <= self._calls[call_index].get_time() < second + 1:
+            while call_index < len(self._calls) and second <= self._calls[call_index].get_time() < second + 1:
                 current_calls.append(self._calls[call_index])
                 call_index += 1
 

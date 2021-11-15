@@ -15,39 +15,28 @@ class Call:
         self._next_pos = self._src
         self._direction = 1 if self._dst > self._src else -1
 
-    def __gt__(self, other):
-        """
-        Overload the ">" operator
-        :param other: The other call to compare with
-        :return: True if this call's next_pos bigger then the other call's
-        """
-
-        return other.get_next_pos() < self._next_pos
-
-    def __ge__(self, other):
-        """
-        Overload the ">=" operator
-        :param other: The other call to compare with
-        :return: True if this call's next_pos bigger then the other call's
-        """
-
-        return other.get_next_pos() <= self._next_pos
-
-    def __eq__(self, other):
-        """
-        Overload the "==" operator
-        :param other: The other call to compare with
-        :return: True if this call's next_pos bigger then the other call's
-        """
-
-        return other.get_next_pos() == self._next_pos
-
     def get_time(self):
         """
         Get the time when the call was made
         :return: a float representing the time when the call was made
         """
         return self._time
+
+    def get_state(self):
+        """
+        Get the state of the call (src, dst, done)
+
+        :return: An int representing the state of the call
+        """
+        return self._state
+
+    def set_state(self, state):
+        """
+        Set the state of the call
+
+        :param state: An int representing the state of the call
+        """
+        self._state = state
 
     def get_src(self):
         """
@@ -83,15 +72,32 @@ class Call:
 
         return self._direction
 
-    #
-    # def call_time(self, e: Elevator):
-    #     way = abs(self._dest - self._src)
-    #     time = e._openTime + e._closeTime + e._startTime + (way / e._speed)
-    #     + e._stopTime + e._openTime + e._stopTime
-    #     return time
-    #
-    # def time_to_src(self, e: Elevator):
-    #     return abs(e._currentPos - self._src) / e._speed
-
     def __repr__(self):
         return f"Time:{self._time}, Source:{self._src}, Destination:{self._dst}\n"
+
+    def __gt__(self, other):
+        """
+        Overload the ">" operator
+        :param other: The other call to compare with
+        :return: True if this call's next_pos bigger then the other call's
+        """
+
+        return other.get_next_pos() < self._next_pos
+
+    def __ge__(self, other):
+        """
+        Overload the ">=" operator
+        :param other: The other call to compare with
+        :return: True if this call's next_pos bigger then the other call's
+        """
+
+        return other.get_next_pos() <= self._next_pos
+
+    def __eq__(self, other):
+        """
+        Overload the "==" operator
+        :param other: The other call to compare with
+        :return: True if this call's next_pos bigger then the other call's
+        """
+
+        return other.get_next_pos() == self._next_pos

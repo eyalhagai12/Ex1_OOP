@@ -35,15 +35,12 @@ def calculate_route_time(calls, elevator):
     # handle first call first
     dist = abs(elevator.get_current_position() - first_call.get_next_pos())
     time += (dist / elevator.get_speed())
-    time += elevator.get_stop_time() + elevator.get_open_time() + elevator.get_close_time()  # add the normal stuff
-
-    if elevator.get_direction() == 0:
-        time += elevator.get_start_time()
+    time += elevator.get_stop_time() + elevator.get_open_time() + elevator.get_close_time() + elevator.get_start_time()
 
     for i in range(1, len(calls)):
         # calculate the time for a call after an interaction with the call before it
         dist = abs(calls[i].get_next_pos() - calls[i - 1].get_next_pos())
-        time += abs(dist / elevator.get_speed())
+        time += dist / elevator.get_speed()
         time += elevator.get_stop_time() + elevator.get_open_time() + elevator.get_close_time() + elevator.get_start_time()
 
     # we add this once at the end where we don't need, so we subtract it from the time
@@ -88,9 +85,9 @@ class Elevator:
         self._state = 0
         self._up_calls = []
         self._down_calls = []
-
-        # as i understood the elevator starts at level 0
         self._currentPos = 0
+        self.counter = -1
+        self.delay = self._stopTime + self._startTime + self._openTime + self._closeTime
 
     def add_call(self, call):
         """
@@ -100,36 +97,22 @@ class Elevator:
         """
 
         # if elevator is going up
-        if self._direction == 1 and call.get_next_pos() >= self._currentPos:
+        if call.get_next_pos() >= self._currentPos:
             # add the call in the correct position
             self._up_calls.append(call)
             self._up_calls.sort()
 
         # if elevator is going down
-        elif self._direction == -1 and call.get_next_pos() <= self._currentPos:
+        elif call.get_next_pos() < self._currentPos:
             # add the call in the correct position
             self._down_calls.append(call)
-            self._down_calls.sort()
-
-        # if elevator is not in any direction
-        else:
-            if call.get_next_pos() >= self._currentPos:
-                # add and sort the calls
-                self._up_calls.append(call)
-                self._up_calls.sort()
-                self._direction = 1
-
-            else:
-                # add and sort the calls
-                self._down_calls.append(call)
-                self._down_calls.sort()
-                self._direction = -1
+            self._down_calls.sort(reverse=True)
 
     def calculate_execution_time(self, call):
         """
         Calculate the time for this elevator to do the call with the new call added to its call list
 
-        :return:A float representing the calculated time
+        :return: A float representing the calculated time
         """
 
         # if elevator is going up
@@ -187,6 +170,74 @@ class Elevator:
                 time = calculate_route_time(down_calls, self)
 
                 return time
+
+    def update(self):
+        """
+        This function moves the elevator in the simulator
+        """
+
+        # if elevator is moving
+        if self._state == 1:
+            # elevator is going up
+            if self._direction == 1:
+                # get the next floor step of the elevator
+                next_jump = self._currentPos + self._speed
+
+                # get the current call next floor
+                call = self._up_calls[0].get_next_pos()
+
+                if next_jump > self._maxFloor:
+                    self._currentPos = self._maxFloor
+                elif call <= next_jump:
+                    self._currentPos = call
+                    self._state = 0
+                else:
+                    self._currentPos = next_jump
+
+            # elevator is going down
+            if self._direction == -1:
+                # get the next floor step of the elevator
+                next_jump = self._currentPos - self._speed
+
+                # get the current call next floor
+                call = self._down_calls[0].get_next_pos()
+
+                if next_jump < self._minFloor:
+                    self._currentPos = self._minFloor
+                elif call >= next_jump:
+                    self._currentPos = call
+                    self._state = 0
+                else:
+                    self._currentPos = next_jump
+
+        # if elevator is not moving
+        else:
+            self.counter += 1
+
+            # when we are done waiting, move
+            if self.delay <= self.counter:
+                self._state = 1
+                self.counter = -1
+
+                # update calls --------- make a function for that
+                # update elevator direction ----------- make a function for that as well
+
+                # if elevator is at direction 0
+                if self._direction == 0:
+                    if len(self._up_calls) < len(self._down_calls):
+                        self._direction = -1
+                    else:
+                        self._direction = 1
+                # if elevator is at some direction
+                else:
+                    # if elevator is going up
+                    if self._direction == 1:
+                        if len(self._up_calls) <= 0:
+                            self._direction = 0
+                    # if elevator is going down
+                    elif self._direction == -1:
+                        if len(self._down_calls) <= 0:
+                            self._direction = 0
 
     def get_direction(self):
         """
