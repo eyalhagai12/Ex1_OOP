@@ -9,6 +9,31 @@ from Building import Building
 
 BUILDING_DIR_PATH = "data/Ex1_input/Ex1_Buildings"
 CALL_DIR_PATH = "data/Ex1_input/Ex1_Calls"
+OUTPUT_PATH = "out"
+
+
+def create_output(record: list, calls: list, file_name: str):
+    """
+    This function updates the given output file output file
+
+    :param record: The record of the simulation
+    :param calls: The calls of this case
+    :param file_name: The name of the output file
+    """
+
+    path = os.path.join(OUTPUT_PATH, file_name)
+
+    with open(path, "w") as out_file:
+        calls_str = ""
+
+        for call, elevator_index in zip(calls, record):
+            call_string = str(call)
+            call_string = call_string.split(",")
+            call_string[-1] = str(elevator_index)
+            call_string = ",".join(call_string)
+            calls_str += call_string + "\n"
+
+        out_file.write(calls_str)
 
 
 def main():
@@ -24,6 +49,10 @@ def main():
     sim = Simulator(building, calls)
 
     sim.run_sim()
+
+    record = sim.get_records()
+
+    create_output(record, calls, sys.argv[3])
 
 
 if __name__ == '__main__':

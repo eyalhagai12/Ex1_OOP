@@ -20,6 +20,7 @@ class Simulator:
         self._building = building
         self._calls = calls
         self._elevators = self._building.get_elevators()
+        self._record = []
 
     def run_sim(self):
         """
@@ -40,7 +41,7 @@ class Simulator:
                 call_index += 1
 
             # assign calls, main work
-            best_indices = [-1 for c in current_calls]  # each cell contains index of the best elevator for this call
+            best_indexes = [-1 for c in current_calls]  # each cell contains index of the best elevator for this call
             best_times = [math.inf for c in current_calls]
 
             for idx, call in enumerate(current_calls):
@@ -51,12 +52,32 @@ class Simulator:
                     # save the best result
                     if best_times[idx] > elev_time:
                         best_times[idx] = elev_time
-                        best_indices[idx] = elev_idx
+                        best_indexes[idx] = elev_idx
 
             # append to the elevators
             for idx, call in enumerate(current_calls):
+                # add the best elevator index to the record
+                self._record.append(best_indexes[idx])
+                print("Call ", call_index, " was allocated to elevator number ", best_indexes[idx])
+
                 # get the right elevator
-                elev = self._elevators[best_indices[idx]]
+                elev = self._elevators[best_indexes[idx]]
 
                 # add the call to it
                 elev.add_call(call)
+
+            # move and update elevators
+            for elevator in self._elevators:
+                elevator.update()
+
+    def get_records(self):
+        """
+        After simulation get the records of the simulation to output to a file
+
+        :return: A list containing the indexes of the elevators for eah call in the call list
+        """
+        if len(self._record) <= 0:
+            print("Please run the simulation first!")
+            return None
+
+        return self._record
