@@ -1,5 +1,6 @@
+import math
+
 from Elevator import Elevator
-import FileReader
 
 
 class Building:
@@ -9,22 +10,18 @@ class Building:
 
     def __init__(self, json_dict: dict):
         """
-        Description
-        -----------
-        Constructs all the fields of this class
-        
-        Parameters
-        ----------
-        json_dict : dict
+        Create a building from a given dictionary
 
-        Returns
-        -------
-        None.
+        :param json_dict: A dictionary that represents the building
         """
 
         self._minFloor = json_dict['_minFloor']
         self._maxFloor = json_dict['_maxFloor']
-        self._elevators = Building.elev_list(json_dict)
+        self._elevators = [Elevator(elev) for elev in json_dict["_elevators"]]
+        self._speed_distribution = []
+        self._groups = []
+        self._dist_distribution = []
+        self.initiate_groups()
 
     def get_elevators(self):
         """
@@ -34,55 +31,75 @@ class Building:
         """
         return self._elevators
 
-    @classmethod
-    def from_json(cls, path: str):
+    def initiate_groups(self):
         """
-        Description
-        -----------
-        Converts JSON file into a Dict and returns it
-        
-        Parameters
-        ----------
-        path : str
+        Create a distribution of elevator speeds an then create groups of elevators
 
-        Returns
-        -------
-        JSON file in dict format
         """
 
-        return FileReader.read_file(path)
+        # create distribution by speed
+        for elev in self._elevators:
+            speed = int(elev.get_speed())
 
-    @classmethod
-    def elev_list(cls, json_dict: dict):
+            if speed not in self._speed_distribution:
+                self._speed_distribution.append(speed)
+
+        self._speed_distribution.sort()
+
+        # create the groups
+        self._groups = [list() for speed in self._speed_distribution]
+
+        for elev in self._elevators:
+            speed = int(elev.get_speed())
+            index = self._speed_distribution.index(speed)
+            self._groups[index].append(elev)
+
+        # create the distance distribution
+        unit = int((self._maxFloor - self._minFloor) / len(self._speed_distribution))
+
+        for i in range(len(self._speed_distribution)):
+            rng = (i * unit, (i + 1) * unit)
+            self._dist_distribution.append(rng)
+
+    def get_call_group(self, call):
         """
-        Description
-        -----------
-        Creates a list of elevators and returns it
-        
-        Parameters
-        ----------
-        json_dict : dict
+        Given a call return the elevators that answer such calls
 
-        Returns
-        -------
-        temp2 : list
+        :param call: A call object, the call that we want to find the group for
+        :return: A list of elevators
+        """
+        # get the distance of this call
+        call_dist = abs(call.get_src() - call.get_dst())
+        index = -1
+
+        for idx, dist in enumerate(self._dist_distribution):
+            if dist[0] <= call_dist < dist[1]:
+                index = idx
+                break
+
+        return index, self._groups[index]
+
+    def get_best_elev_for_call(self, call):
+        """
+        Return the index of the best elevator for his call
+
+        :param call: The call to which to find the best elevator
+        :return: An integer representing hte index of the best elevator
         """
 
-        temp1 = json_dict['_elevators']
-        temp2 = []
-        for i in range(len(temp1)):
-            temp2.append(Elevator(temp1[i]))
-        return temp2
+        best_time = math.inf
+        best_index = -1
+        for idx, elevator in enumerate(self._elevators):
+            time = elevator.calculate_execution_time(call)
+
+            if time < best_time:
+                best_index = idx
+                best_time = time
+
+        return best_index
 
     def __repr__(self):
         """
-        Description
-        -----------
-        Returns a string representation of the building
-        
-        Returns
-        -------
-        str
+        Return a representation of this building
         """
-
         return f"minFloor: {self._minFloor}, maxFloor: {self._maxFloor}, elevators: {self._elevators}\n"

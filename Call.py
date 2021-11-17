@@ -12,7 +12,6 @@ class Call:
         self._dst = int(x.split(",")[3])
         self._state = int(x.split(",")[4])
         self._assigned = int(x.split(",")[5])
-        self._next_pos = self._src
         self._direction = 1 if self._dst > self._src else -1
 
     def get_time(self):
@@ -81,7 +80,7 @@ class Call:
         return self._direction
 
     def __repr__(self):
-        return f"Time:{self._time}, Source:{self._src}, Destination:{self._dst}\n"
+        return f"Time:{self._time}, Source:{self._src}, Destination:{self._dst}, State: {self._state}\n"
 
     def __str__(self):
         return f"Elevator call,{self._time},{self._src},{self._dst},0,-1"
@@ -94,7 +93,7 @@ class Call:
         :return: True if this call's next_pos bigger then the other call's
         """
 
-        return other.get_next_pos() < self._next_pos
+        return other.get_next_pos() < self.get_next_pos()
 
     def __ge__(self, other):
         """
@@ -104,7 +103,27 @@ class Call:
         :return: True if this call's next_pos bigger then the other call's
         """
 
-        return other.get_next_pos() <= self._next_pos
+        return other.get_next_pos() <= self.get_next_pos()
+
+    def __lt__(self, other):
+        """
+        Overload the "<" operator
+
+        :param other: The other call to compare with
+        :return: True if this call's next_pos bigger then the other call's
+        """
+
+        return other.get_next_pos() > self.get_next_pos()
+
+    def __le__(self, other):
+        """
+        Overload the "<=" operator
+
+        :param other: The other call to compare with
+        :return: True if this call's next_pos bigger then the other call's
+        """
+
+        return other.get_next_pos() >= self.get_next_pos()
 
     def __eq__(self, other):
         """
@@ -114,4 +133,4 @@ class Call:
         :return: True if this call's next_pos bigger then the other call's
         """
 
-        return other.get_next_pos() == self._next_pos
+        return other.get_next_pos() == self.get_next_pos()
