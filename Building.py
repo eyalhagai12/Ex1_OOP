@@ -26,14 +26,6 @@ class Building:
         self._maxFloor = json_dict['_maxFloor']
         self._elevators = Building.elev_list(json_dict)
 
-    def get_elevators(self):
-        """
-        Get the list of elevators in this building
-
-        :return: A list of elevator objects
-        """
-        return self._elevators
-
     @classmethod
     def from_json(cls, path: str):
         """
@@ -74,6 +66,9 @@ class Building:
             temp2.append(Elevator(temp1[i]))
         return temp2
 
+    def getElvators(self):
+        return self._elevators
+    
     def __repr__(self):
         """
         Description
