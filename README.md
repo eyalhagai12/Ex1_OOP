@@ -35,4 +35,5 @@ then i run a loop over the total simulation time, each loop is a second in the s
 ### the algorithm itself:
 the algorithm itself simply chooses the best algorithm according to the amount of elevators, if there is a small amount of elevators we use the offline algorithm and if there are many elevators (we chose 8+ elevators) we use the online simulation algorithm, this way gave us the best results in all our tests
 
-
+### UML Graph:
+![uml1](https://user-images.githubusercontent.com/77681248/142482512-8cf81f74-be20-42e8-a5ae-f02c82c271f1.png)
