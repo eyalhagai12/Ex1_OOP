@@ -14,13 +14,15 @@ def calculate_route_time(calls, elevator):
     :return: A float representing the time it should take the elevator to execute the calls
     """
 
-    first_call, last_call = calls[0], calls[-1]
-    time = elevator.get_extra_time()
+    time = 0
+    if len(calls) > 0:
+        first_call = calls[0]
+        # time += elevator.get_extra_time()
 
-    # handle first call first
-    dist = abs(elevator.get_current_position() - first_call.get_next_pos())
-    time += (dist / elevator.get_speed())
-    time += elevator.get_stop_time() + elevator.get_open_time() + elevator.get_close_time() + elevator.get_start_time()
+        # handle first call first
+        dist = abs(elevator.get_current_position() - first_call.get_next_pos())
+        time += (dist / elevator.get_speed())
+        time += elevator.get_stop_time() + elevator.get_open_time() + elevator.get_close_time() + elevator.get_start_time()
 
     for i in range(1, len(calls)):
         # calculate the time for a call after an interaction with the call before it
@@ -28,13 +30,10 @@ def calculate_route_time(calls, elevator):
         time += dist / elevator.get_speed()
         time += elevator.get_stop_time() + elevator.get_open_time() + elevator.get_close_time() + elevator.get_start_time()
 
-    # we add this once at the end where we don't need, so we subtract it from the time
-    time -= elevator.get_start_time()
-
     return time
 
 
-class Elevator:
+class SimElevator:
     """
     This class is used to simulate an elevator \n
 
@@ -73,7 +72,7 @@ class Elevator:
         self._currentPos = 0
         self.counter = -1
         self.delay = self._stopTime + self._startTime + self._openTime + self._closeTime
-        self._extra_time = 0
+        # self._extra_time = 0
 
     def add_call(self, call):
         """
@@ -113,6 +112,9 @@ class Elevator:
         :return: A float representing the calculated time
         """
 
+        # speed / distance must be close to 1 as much as possible
+        call_dist = abs(call.get_src() - call.get_dst())
+
         # if elevator is going up
         if self._direction == 1 and call.get_next_pos() >= self._currentPos:
             # copy the up calls
@@ -144,28 +146,30 @@ class Elevator:
         # if elevator is not in any direction
         else:
             if call.get_next_pos() >= self._currentPos:
-                # copy the up calls
+                # copy the up calls and down calls
                 up_calls = self._up_calls.copy()
+                down_calls = self._down_calls.copy()
 
                 # add and sort the calls
                 up_calls.append(call)
                 up_calls.sort()
 
                 # calculate time
-                time = calculate_route_time(up_calls, self)
+                time = calculate_route_time(up_calls, self) + calculate_route_time(down_calls, self)
 
                 return time
 
             else:
-                # copy the down calls
+                # copy the down calls and up calls
                 down_calls = self._down_calls.copy()
+                up_calls = self._up_calls.copy()
 
                 # add and sort the calls
                 down_calls.append(call)
-                down_calls.sort()
+                down_calls.sort(reverse=True)
 
                 # calculate time
-                time = calculate_route_time(down_calls, self)
+                time = calculate_route_time(down_calls, self) + calculate_route_time(up_calls, self)
 
                 return time
 
@@ -223,6 +227,7 @@ class Elevator:
 
         if len(self._down_calls) <= 0 and len(self._up_calls) <= 0:
             self._direction = 0
+            self._state = 0
 
     def update_calls(self):
         """
@@ -250,6 +255,9 @@ class Elevator:
                 self.add_call(call)  # add the call back to the elevator calls
 
     def move(self):
+        """
+        Move the elevator in the simulation
+        """
         # elevator is going up
         if len(self._up_calls) > 0 and self._direction == 1:
             # get the next floor step of the elevator
@@ -262,7 +270,7 @@ class Elevator:
             if next_jump > self._maxFloor:
                 self._currentPos = self._maxFloor
             if call_pos <= next_jump:
-                self._extra_time += abs(self._currentPos - call_pos) / self._speed
+                # self._extra_time += abs(self._currentPos - call_pos) / self._speed
                 self._currentPos = call_pos
                 self._state = 0
             else:
@@ -280,7 +288,7 @@ class Elevator:
             if next_jump < self._minFloor:
                 self._currentPos = self._minFloor
             if call_pos >= next_jump:
-                self._extra_time += abs(self._currentPos - call_pos) / self._speed
+                # self._extra_time += abs(self._currentPos - call_pos) / self._speed
                 self._currentPos = call_pos
                 self._state = 0
             else:
@@ -373,4 +381,5 @@ class Elevator:
         # why did you do this ?
         o = '{'
         c = '}'
-        return f"\n{o}\n\tElevator ID: {self._id}\n\tPosition: {self._currentPos}\n\tSpeed: {self._speed}\nCalls: {len(self._up_calls) + len(self._down_calls)}\n{c}"
+        return f"\n{o}\n\tElevator ID: {self._id}\n\tPosition: {self._currentPos}\n\tSpeed: {self._speed}\n" \
+               f"Calls: {len(self._up_calls) + len(self._down_calls)}\nDirection: {self._direction}\nState: {self._state}{c}"

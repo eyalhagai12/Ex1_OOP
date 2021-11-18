@@ -1,8 +1,7 @@
 import FileReader
 import sys
 import os
-from Elevator import Elevator
-from Elevator import calculate_route_time
+from Algo import Algo
 from Call import Call
 from Simulator import Simulator
 from Building import Building
@@ -10,6 +9,17 @@ from Building import Building
 BUILDING_DIR_PATH = "data/Ex1_input/Ex1_Buildings"
 CALL_DIR_PATH = "data/Ex1_input/Ex1_Calls"
 OUTPUT_PATH = "out"
+
+combinations = [("B1", "a"), ("B2", "a"), ("B3", "a"), ("B3", "b"), ("B3", "c"), ("B3", "d"), ("B4", "a"),
+                ("B4", "b"), ("B4", "c"), ("B4", "d"), ("B5", "a"), ("B5", "b"), ("B5", "c"), ("B5", "d")]
+
+
+def make_outputs():
+    for comb in combinations:
+        sys.argv[1] = f"{comb[0]}.json"
+        sys.argv[2] = f"Calls_{comb[1]}.csv"
+        sys.argv[3] = f"Ex1_{comb[0]}_case_{comb[1]}.csv"
+        main()
 
 
 def create_output(record: list, calls: list, file_name: str):
@@ -46,13 +56,19 @@ def main():
     calls = [Call(c) for c in calls_list]
     building = Building(building_dict)
 
-    sim = Simulator(building, calls)
+    if len(building.get_elevators()) >= 8:
+        sim = Simulator(building, calls)
 
-    sim.run_sim()
+        sim.run_sim()
 
-    record = sim.get_records()
+        record = sim.get_records()
 
-    create_output(record, calls, sys.argv[3])
+        create_output(record, calls, sys.argv[3])
+    else:
+        algo = Algo(building, call_path)
+        algo.allocateAnElevator()
+        elevator_idx = [call.get_assigned() for call in algo.get_calls()]
+        create_output(elevator_idx, calls, sys.argv[3])
 
 
 if __name__ == '__main__':

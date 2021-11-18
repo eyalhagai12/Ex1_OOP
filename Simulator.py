@@ -42,23 +42,17 @@ class Simulator:
 
             # assign calls, main work
             best_indexes = [-1 for c in current_calls]  # each cell contains index of the best elevator for this call
-            best_times = [math.inf for c in current_calls]
+            # best_times = [math.inf for c in current_calls]
 
             for idx, call in enumerate(current_calls):
-                for elev_idx, elevator in enumerate(self._elevators):
-                    # calculate time
-                    elev_time = elevator.calculate_execution_time(call)
-
-                    # save the best result
-                    if best_times[idx] > elev_time:
-                        best_times[idx] = elev_time
-                        best_indexes[idx] = elev_idx
+                # create function get best for call
+                index = self._building.get_best_elev_for_call(call)
+                best_indexes[idx] = index
 
             # append to the elevators
             for idx, call in enumerate(current_calls):
                 # add the best elevator index to the record
                 self._record.append(best_indexes[idx])
-                print("Call ", call_index, " was allocated to elevator number ", best_indexes[idx])
 
                 # get the right elevator
                 elev = self._elevators[best_indexes[idx]]
