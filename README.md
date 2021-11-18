@@ -1,3 +1,10 @@
 # Ex1_OOP
 
-This is our offline elevator algorithm 
+github repo: https://github.com/eyalhagai12/Ex1_OOP.git
+
+
+must remember to write this as soon as we chose an algorithm
+
+
+
+
