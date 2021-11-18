@@ -10,17 +10,6 @@ BUILDING_DIR_PATH = "data/Ex1_input/Ex1_Buildings"
 CALL_DIR_PATH = "data/Ex1_input/Ex1_Calls"
 OUTPUT_PATH = "out"
 
-combinations = [("B1", "a"), ("B2", "a"), ("B3", "a"), ("B3", "b"), ("B3", "c"), ("B3", "d"), ("B4", "a"),
-                ("B4", "b"), ("B4", "c"), ("B4", "d"), ("B5", "a"), ("B5", "b"), ("B5", "c"), ("B5", "d")]
-
-
-def make_outputs():
-    for comb in combinations:
-        sys.argv[1] = f"{comb[0]}.json"
-        sys.argv[2] = f"Calls_{comb[1]}.csv"
-        sys.argv[3] = f"Ex1_{comb[0]}_case_{comb[1]}.csv"
-        main()
-
 
 def create_output(record: list, calls: list, file_name: str):
     """

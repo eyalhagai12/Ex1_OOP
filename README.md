@@ -39,3 +39,9 @@ the algorithm itself simply chooses the best algorithm according to the amount o
 <p align="center">
 <img src="https://user-images.githubusercontent.com/77681248/142482512-8cf81f74-be20-42e8-a5ae-f02c82c271f1.png">
 </p>
+
+### Literature 
+1. https://www.youtube.com/watch?v=BCN9mQOT3RQ
+2. https://www.youtube.com/watch?v=oY1QlCqWOss&t=25s
+3. https://softwareengineering.stackexchange.com/a/331694
+4. http://www.columbia.edu/~cs2035/courses/ieor4405.S13/p14.pdf

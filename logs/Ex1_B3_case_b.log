@@ -3648,5 +3648,5 @@ Ex1 (OOP) Simulator log: stage data/Ex1_input/Ex1_Buildings/B3.json,  out/Ex1_B3
 3704.0,Elev,0,  arrived at src, 65, Elevator call,3383.110175,65,-5,2,0
 3704.0, elevID,0,  pos,65,  cmd, goto,64
 3710.0,************* Simulation Ended ************
-Code Owners,1111,2222,3333,  Building_file,data/Ex1_input/Ex1_Buildings/B3.json,  Calls,out/Ex1_B3_case_b.csv
-Total waiting time: 454343.0330880018,  average waiting time per call: 454.3430330880018,  unCompleted calls,106,  certificate, -1447280863
+Code Owners,212487292,324205160,  Building_file,data/Ex1_input/Ex1_Buildings/B3.json,  Calls,out/Ex1_B3_case_b.csv
+Total waiting time: 454343.0330880018,  average waiting time per call: 454.3430330880018,  unCompleted calls,106,  certificate, -1525254390
