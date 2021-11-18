@@ -1,6 +1,7 @@
 import math
 
-from Elevator import Elevator
+from Sim_Elevator import SimElevator
+from Algo_Elevator import AlgoElevator
 
 
 class Building:
@@ -17,11 +18,15 @@ class Building:
 
         self._minFloor = json_dict['_minFloor']
         self._maxFloor = json_dict['_maxFloor']
-        self._elevators = [Elevator(elev) for elev in json_dict["_elevators"]]
-        self._speed_distribution = []
-        self._groups = []
-        self._dist_distribution = []
-        self.initiate_groups()
+        self._elevators = [AlgoElevator(elev) for elev in json_dict["_elevators"]]
+
+        if len(self._elevators) >= 8:
+            self._elevators = [SimElevator(elev) for elev in json_dict["_elevators"]]
+
+        # self._speed_distribution = []
+        # self._groups = []
+        # self._dist_distribution = []
+        # self.initiate_groups()
 
     def get_elevators(self):
         """
@@ -31,53 +36,53 @@ class Building:
         """
         return self._elevators
 
-    def initiate_groups(self):
-        """
-        Create a distribution of elevator speeds an then create groups of elevators
-
-        """
-
-        # create distribution by speed
-        for elev in self._elevators:
-            speed = int(elev.get_speed())
-
-            if speed not in self._speed_distribution:
-                self._speed_distribution.append(speed)
-
-        self._speed_distribution.sort()
-
-        # create the groups
-        self._groups = [list() for speed in self._speed_distribution]
-
-        for elev in self._elevators:
-            speed = int(elev.get_speed())
-            index = self._speed_distribution.index(speed)
-            self._groups[index].append(elev)
-
-        # create the distance distribution
-        unit = int((self._maxFloor - self._minFloor) / len(self._speed_distribution))
-
-        for i in range(len(self._speed_distribution)):
-            rng = (i * unit, (i + 1) * unit)
-            self._dist_distribution.append(rng)
-
-    def get_call_group(self, call):
-        """
-        Given a call return the elevators that answer such calls
-
-        :param call: A call object, the call that we want to find the group for
-        :return: A list of elevators
-        """
-        # get the distance of this call
-        call_dist = abs(call.get_src() - call.get_dst())
-        index = -1
-
-        for idx, dist in enumerate(self._dist_distribution):
-            if dist[0] <= call_dist < dist[1]:
-                index = idx
-                break
-
-        return index, self._groups[index]
+    # def initiate_groups(self):
+    #     """
+    #     Create a distribution of elevator speeds an then create groups of elevators
+    #
+    #     """
+    #
+    #     # create distribution by speed
+    #     for elev in self._elevators:
+    #         speed = int(elev.get_speed())
+    #
+    #         if speed not in self._speed_distribution:
+    #             self._speed_distribution.append(speed)
+    #
+    #     self._speed_distribution.sort()
+    #
+    #     # create the groups
+    #     self._groups = [list() for speed in self._speed_distribution]
+    #
+    #     for elev in self._elevators:
+    #         speed = int(elev.get_speed())
+    #         index = self._speed_distribution.index(speed)
+    #         self._groups[index].append(elev)
+    #
+    #     # create the distance distribution
+    #     unit = int((self._maxFloor - self._minFloor) / len(self._speed_distribution))
+    #
+    #     for i in range(len(self._speed_distribution)):
+    #         rng = (i * unit, (i + 1) * unit)
+    #         self._dist_distribution.append(rng)
+    #
+    # def get_call_group(self, call):
+    #     """
+    #     Given a call return the elevators that answer such calls
+    #
+    #     :param call: A call object, the call that we want to find the group for
+    #     :return: A list of elevators
+    #     """
+    #     # get the distance of this call
+    #     call_dist = abs(call.get_src() - call.get_dst())
+    #     index = -1
+    #
+    #     for idx, dist in enumerate(self._dist_distribution):
+    #         if dist[0] <= call_dist < dist[1]:
+    #             index = idx
+    #             break
+    #
+    #     return index, self._groups[index]
 
     def get_best_elev_for_call(self, call):
         """

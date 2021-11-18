@@ -33,7 +33,7 @@ def calculate_route_time(calls, elevator):
     return time
 
 
-class Elevator:
+class SimElevator:
     """
     This class is used to simulate an elevator \n
 
@@ -72,7 +72,7 @@ class Elevator:
         self._currentPos = 0
         self.counter = -1
         self.delay = self._stopTime + self._startTime + self._openTime + self._closeTime
-        self._extra_time = 0
+        # self._extra_time = 0
 
     def add_call(self, call):
         """
@@ -270,7 +270,7 @@ class Elevator:
             if next_jump > self._maxFloor:
                 self._currentPos = self._maxFloor
             if call_pos <= next_jump:
-                self._extra_time += abs(self._currentPos - call_pos) / self._speed
+                # self._extra_time += abs(self._currentPos - call_pos) / self._speed
                 self._currentPos = call_pos
                 self._state = 0
             else:
@@ -288,7 +288,7 @@ class Elevator:
             if next_jump < self._minFloor:
                 self._currentPos = self._minFloor
             if call_pos >= next_jump:
-                self._extra_time += abs(self._currentPos - call_pos) / self._speed
+                # self._extra_time += abs(self._currentPos - call_pos) / self._speed
                 self._currentPos = call_pos
                 self._state = 0
             else:

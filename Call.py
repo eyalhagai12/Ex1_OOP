@@ -79,6 +79,17 @@ class Call:
 
         return self._direction
 
+    def set_assigned(self, x: int):
+        """
+        Assign to an elevator
+
+        :param x: The index of the elevator
+        """
+        self._assigned = x
+
+    def get_assigned(self):
+        return self._assigned
+
     def __repr__(self):
         return f"Time:{self._time}, Source:{self._src}, Destination:{self._dst}, State: {self._state}\n"
 

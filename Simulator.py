@@ -35,9 +35,6 @@ class Simulator:
         for second in range(simulation_time):
             current_calls = []
 
-            if second == 1632:
-                print()
-
             # get current calls
             while call_index < len(self._calls) and second <= self._calls[call_index].get_time() < second + 1:
                 current_calls.append(self._calls[call_index])
