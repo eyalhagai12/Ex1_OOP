@@ -22,8 +22,17 @@ This algorithm receives as input a building (that has elevators) and a list of e
    - for each calculation, divide by "Division"
    - This is the elevator index for each call. Assign the call to the elevator.
 
+### "Online like" simulation:
+this algorithm gets a building and a list of call objects as its input and simulates simulates the movement and position of the calls
+first i get the total simulation time by taking the last calls initiation time and add two minutes to that time
+then i run a loop over the total simulation time, each loop is a second in the simulation, this loop does 3 simple steps:
+
+1. get all the calls in the current second in the simulation
+2. find the best elevator to which to assign this call to, this is done by calculating how long will it take for each elevator to finish its route with the new call, and then choose the one that takes the least amount of time
+3. move the elevators one step in the direction they were going
 
 
-
+### the algorithm itself:
+the algorithm itself simply chooses the best algorithm according to the amount of elevators, if there is a small amount of elevators we use the offline algorithm and if there are many elevators (we chose 8+ elevators) we use the online simulation algorithm, this way gave us the best results in all our tests
 
 
